@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - 'Sacred-Year-v31.47.38-Android-Source.zip'
+      - 'Sacred-Year-v31.47.39-Android-Source.zip'
       - '.github/workflows/android-build.yml'
 
 jobs:
@@ -27,7 +27,7 @@ jobs:
         run: |
           rm -rf build-source
           mkdir build-source
-          unzip -q Sacred-Year-v31.47.38-Android-Source.zip -d build-source
+          unzip -q Sacred-Year-v31.47.39-Android-Source.zip -d build-source
 
       - name: Install Capacitor dependencies
         working-directory: build-source/android-project
@@ -48,7 +48,7 @@ jobs:
       - name: Upload Sacred Year APK
         uses: actions/upload-artifact@v4
         with:
-          name: Sacred-Year-v31.47.38-Android-Test
+          name: Sacred-Year-v31.47.39-Android-Test
           path: build-source/android-project/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
