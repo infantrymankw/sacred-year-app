@@ -1,0 +1,52 @@
+name: Build Sacred Year Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Sacred-Year-v31.47.30-Android-Source.zip'
+      - '.github/workflows/android-build.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: gradle
+
+      - name: Extract Sacred Year source
+        run: |
+          rm -rf build-source
+          mkdir build-source
+          unzip -q Sacred-Year-v31.47.30-Android-Source.zip -d build-source
+
+      - name: Build APK
+        working-directory: build-source/android-project/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: Verify APK
+        run: |
+          APK="build-source/android-project/android/app/build/outputs/apk/debug/app-debug.apk"
+          test -f "$APK"
+          ls -lh "$APK"
+
+      - name: Upload Sacred Year APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Sacred-Year-v31.47.30-Android-Test
+          path: build-source/android-project/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 14
