@@ -23,12 +23,15 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
-
       - name: Extract Sacred Year source
         run: |
           rm -rf build-source
           mkdir build-source
           unzip -q Sacred-Year-v31.47.30-Android-Source.zip -d build-source
+
+      - name: Install Capacitor dependencies
+        working-directory: build-source/android-project
+        run: npm ci
 
       - name: Build APK
         working-directory: build-source/android-project/android
